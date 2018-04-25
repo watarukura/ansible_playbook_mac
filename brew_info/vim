@@ -1,0 +1,33 @@
+vim: stable 8.0.1750 (bottled), HEAD
+Vi 'workalike' with many additional features
+https://www.vim.org/
+Conflicts with:
+  ex-vi (because vim and ex-vi both install bin/ex and bin/view)
+/usr/local/Cellar/vim/8.0.1650_1 (1,429 files, 22.9MB)
+  Poured from bottle on 2018-04-03 at 15:54:00
+/usr/local/Cellar/vim/8.0.1750 (1,429 files, 22.9MB) *
+  Poured from bottle on 2018-04-25 at 12:59:48
+From: https://github.com/Homebrew/homebrew-core/blob/master/Formula/vim.rb
+==> Dependencies
+Required: perl, ruby
+Recommended: python
+Optional: gettext, lua, luajit, python@2
+==> Options
+--with-client-server
+	Enable client/server mode
+--with-gettext
+	Build vim with National Language Support (translated messages, keymaps)
+--with-lua
+	Build vim with lua support
+--with-luajit
+	Build with luajit support
+--with-override-system-vi
+	Override system vi
+--with-python@2
+	Build vim with python@2 instead of python[3] support
+--with-tcl
+	Build vim with tcl support
+--without-python
+	Build vim without python support
+--HEAD
+	Install HEAD version

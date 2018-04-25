@@ -1,0 +1,114 @@
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  sudo: no
+  vars:
+    homebrew_taps:
+      # - homebrew/binary
+      # - homebrew/dupes
+      - caskroom/cask
+      - homebrew/services
+    homebrew_packages:
+      - { name: readline }
+      - { name: openssl }
+      - { name: openssl, state: linked, install_options: force }
+      - { name: git }
+      - { name: wget }
+      - { name: curl }
+      - { name: go }
+      - { name: rbenv }
+      - { name: ruby-build }
+      - { name: vim }
+      - { name: mysql }
+      - { name: bash }
+      - { name: coreutils }
+      - { name: findutils }
+      - { name: fish }
+      - { name: gawk }
+      - { name: gnu-sed }
+      - { name: gnu-tar }
+      - { name: gnutls }
+      - { name: graphviz }
+      - { name: grep }
+      - { name: jq }
+      - { name: mas }
+      - { name: netcat }
+      - { name: nkf }
+      - { name: peco }
+      - { name: php@7.1 }
+      - { name: postgresql }
+      - { name: pyenv }
+      - { name: sqlite }
+      - { name: tig }
+      - { name: w3m }
+      # - { name: redis }
+    homebrew_enabled_services:
+      - mysql
+      # - redis
+    homebrew_cask_packages:
+      # - { name: iterm2 }
+      - { name: firefox }
+      # - { name: google-chrome }
+      # - { name: google-japanese-ime }
+      # - { name: atom }
+      # - { name: skype }
+      # - { name: slack }
+      # - { name: vagrant }
+      # - { name: virtualbox }
+      # - { name: phpstorm }
+      # - { name: pycharm }
+      # - { name: datagrip }
+      # - { name: sequel-pro }
+      # - { name: postman }
+      - { name: cyberduck }
+      # - { name: gimp }
+      # - { name: marp }
+      # - { name: vmware-fusion }
+      # - { name: sourcetree }
+      - { name: open-usp-tukubai }
+
+  tasks:
+    - name: homebrew の tap リポジトリを追加
+      homebrew_tap: tap={{ item }} state=present
+      with_items: "{{ homebrew_taps }}"
+
+    - name: homebrew update確認
+      homebrew: update_homebrew=yes
+
+    # brew
+    - name: brew packageのインストール
+      homebrew: >
+        name={{ item.name }}
+        state={{ item.state | default('latest') }}
+        install_options={{
+          item.install_options | default() | join(',')
+          if item.install_options is not string
+          else item.install_options
+        }}
+      with_items: "{{ homebrew_packages }}"
+      register: brew_result
+    - name: brew パッケージの情報保存先ディレクトリを作成
+      file: path=brew_info state=directory
+    - name: brew パッケージの情報を保存
+      shell: brew info {{ item }} > brew_info/{{ item }}
+      with_items: "{{ brew_result.results | selectattr('changed') | map(attribute='item') | map(attribute='name') | list }}"
+
+    # brew services
+    - name: Get currently available brew services.
+      shell: "brew services list | sed '1 d' | cut -d ' ' -f 1"
+      register: brew_services
+
+    - name: Enable brew services.
+      command: "brew services start {{ item }}"
+      with_items: "{{ homebrew_enabled_services }}"
+      when: "'{{ item }}' in brew_services.stdout_lines"
+
+    # - name: Install bundler（インストールは成功するが、Projectによってはうまく動作しなかった）
+    #   gem:
+    #     name: bundler
+    #     user_install: no
+    #     executable: /usr/local/bin/gem
+
+  # handlers:
+  #   - name: run fc-cache
+  #     shell: fc-cache -vf

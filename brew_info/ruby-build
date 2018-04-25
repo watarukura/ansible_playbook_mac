@@ -1,0 +1,19 @@
+ruby-build: stable 20180424, HEAD
+Install various Ruby versions and implementations
+https://github.com/rbenv/ruby-build
+/usr/local/Cellar/ruby-build/20180329 (384 files, 195.9KB)
+  Built from source on 2018-04-03 at 15:51:52
+/usr/local/Cellar/ruby-build/20180424 (396 files, 200.6KB) *
+  Built from source on 2018-04-25 at 12:59:29
+From: https://github.com/Homebrew/homebrew-core/blob/master/Formula/ruby-build.rb
+==> Dependencies
+Recommended: autoconf, pkg-config, openssl
+==> Options
+--without-autoconf
+	Build without autoconf support
+--without-openssl
+	Build without openssl support
+--without-pkg-config
+	Build without pkg-config support
+--HEAD
+	Install HEAD version
