@@ -46,16 +46,16 @@
       - mysql
       # - redis
     homebrew_cask_packages:
-      # - { name: iterm2 }
+      - { name: iterm2 }
       - { name: firefox }
-      # - { name: google-chrome }
-      # - { name: google-japanese-ime }
+      - { name: google-chrome }
+      - { name: google-japanese-ime }
       # - { name: atom }
       # - { name: skype }
       # - { name: slack }
       # - { name: vagrant }
       # - { name: virtualbox }
-      # - { name: phpstorm }
+      - { name: phpstorm }
       # - { name: pycharm }
       # - { name: datagrip }
       # - { name: sequel-pro }
@@ -64,8 +64,86 @@
       # - { name: gimp }
       # - { name: marp }
       # - { name: vmware-fusion }
-      # - { name: sourcetree }
+      - { name: sourcetree }
       - { name: open-usp-tukubai }
+    # mas_applications:
+    #   - { id: 715768417,name: "Microsoft Remote Desktop (8.0.27325)" }
+    #   - { id: 1024640650, name: "CotEditor (3.3.5)" }
+    #   - { id: 682658836, name: "GarageBand (10.2.0)" }
+    #   - { id: 483014855, name: "Browser Fairy (1.7.5)" }
+    #   - { id: 803453959, name: "Slack (3.1.1)" }
+    # mac_defaults_settings:
+    #   - {
+    #     domain: com.apple.ImageCapture,
+    #     key: disableHotPlug,
+    #     type: bool,
+    #     value: false,
+    #   }
+    #   # Finder
+    #   - {
+    #     domain: com.apple.finder,
+    #     key: NewWindowTarget,
+    #     type: string,
+    #     value: PfDe,
+    #   }
+    #   - {
+    #     domain: com.apple.finder,
+    #     key: ShowStatusBar,
+    #     type: bool,
+    #     value: true,
+    #   }
+    #   - {
+    #     domain: com.apple.finder,
+    #     key: ShowPathbar,
+    #     type: bool,
+    #     value: true,
+    #   }
+    #   - {
+    #     domain: com.apple.finder,
+    #     key: AppleShowAllFiles,
+    #     type: bool,
+    #     value: true,
+    #   }
+    #   # Dock
+    #   - {
+    #     domain: com.apple.dock,
+    #     key: autohide,
+    #     type: bool,
+    #     value: true,
+    #   }
+    #   - {
+    #     domain: com.apple.dock,
+    #     key: magnification,
+    #     type: bool,
+    #     value: false,
+    #   }
+    #   - {
+    #     domain: com.apple.dock,
+    #     key: tilesize,
+    #     type: int,
+    #     value: 50,
+    #   }
+    # mac_global_domain_defaults_settings:
+    #   - {
+    #     key: InitialKeyRepeat,
+    #     type: int,
+    #     value: 20,
+    #   }
+    #   - {
+    #     key: KeyRepeat,
+    #     type: int,
+    #     value: 1,
+    #   }
+    #   - {
+    #     key: NSDocumentSaveNewDocumentsToCloud,
+    #     type: bool,
+    #     value: false,
+    #   }
+    #   - {
+    #     key: AppleShowAllExtensions,
+    #     type: bool,
+    #     value: true
+    #   }
 
   tasks:
     - name: homebrew の tap リポジトリを追加
@@ -102,6 +180,37 @@
       command: "brew services start {{ item }}"
       with_items: "{{ homebrew_enabled_services }}"
       when: "'{{ item }}' in brew_services.stdout_lines"
+
+    # # mas
+    # - name: signout mas
+    #   shell: >
+    #     mas signout
+
+    # - name: signin to mas
+    #   shell: >
+    #     mas signin {{appstore_id}} "{{appstore_password}}"
+
+    # - name: install applications
+    #   shell: >
+    #     mas install {{item.id}}
+    #   with_items: mas_applications
+    #   when: mas_applications
+    #   run_once: true
+
+    # - name: upgrade applications
+    #   shell: >
+    #     mas upgrade
+
+   # defaults 
+    # - name: 
+    #   osx_defaults: >
+    #     domain={{ item.domain }}
+    #     key={{ item.key }}
+    #     type={{ item.type }}
+    #     value={{ item.value }}
+    #     state=present
+    #   with_items: mac_defaults_settings
+    #   when: mac_defaults_settings
 
     # - name: Install bundler（インストールは成功するが、Projectによってはうまく動作しなかった）
     #   gem:
